@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CS20 HW 8: APIs</title>
+	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript">
+            $('document').ready(function() {
+                ajaxDogPics();
+                fetchDogPics();
+            });
+        </script>
+        <style>
+            div {
+                white-space: pre;
+                width: 100%;
+                overflow: auto;
+            }
+
+            img {
+                height: 200px;
+                margin-right: 8px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>CS 20 Assigment 8: API Fun</h1>
+        <h3>Request via Ajax</h3>
+        <div id="ajax-results"></div>
+        <h3>Request via fetch()</h3>
+        <div id="fetch-results"></div>
+        <p>The API I selected is called Dog API. It supplies random dog pictures.</p>
+        <p>Documentation for Dog API can be found
+            <a href="https://kinduff.github.io/dog-api/">here</a>.
+        </p>
+        <p>For the example on this page, the options I used were to get 3 photos of dogs 
+           from any breed.
+        </p>
+        <p>Applications where this API could be useful might include:
+            <ol>
+                <li>Messaging applications where pictures could be sent like GIFs</li>
+                <li>Productivity applications where one random picture could be displayed 
+                    each day as a motivator or reward
+                </li>
+            </ol>
+        </p>
+
+        <script type="text/javascript">
+            function ajaxDogPics() {
+                let req = new XMLHttpRequest();
+                if (!req) {
+                    alert("Unable to creat XMLHttpRequest object");
+                    return;
+                }
+                console.log("hey");
+                req.open("GET", "https://dog.ceo/api/breeds/image/random/3", true);
+                console.log("afdkalfjdkslajf")
+                req.onreadystatechange = function () {
+                    if (req.readyState == 4 && req.status == 200) {
+                        displayDogPics(req.responseText, "#ajax-results");
+                    } else {
+                        console.log("readyState: " + req.readyState);
+                        console.log("status: " + req.status);
+                    }
+                };
+                req.send();
+            }
+
+            function fetchDogPics() {
+                let response = fetch("https://dog.ceo/api/breeds/image/random/3")
+                    .then(response => response.text())
+                    .then(data => displayDogPics(data, "#fetch-results"));
+            }
+
+            function displayDogPics(responseText, tagId) {
+                let displayText = "API JSON response object text: \n";
+                displayText += responseText;
+                displayText += "\n\nAPI response data: \n";
+                $(tagId).text(displayText);
+                
+                let json = JSON.parse(responseText);
+                for (let i = 0; i < 3; i++) {
+                    let imgSrc = json.message[i];
+                    let imgTag = "<img src=" + imgSrc + ">";
+                    $(tagId).append(imgTag);
+                }
+            }
+        </script>
+    </body>
+</html>
