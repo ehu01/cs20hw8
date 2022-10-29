@@ -46,6 +46,7 @@
         </p>
 
         <script type="text/javascript">
+            // make the API call using xhr
             function ajaxDogPics() {
                 let req = new XMLHttpRequest();
                 if (!req) {
@@ -66,12 +67,16 @@
                 req.send();
             }
 
+            // make the API call using fetch()
             function fetchDogPics() {
                 let response = fetch("https://dog.ceo/api/breeds/image/random/3")
                     .then(response => response.text())
                     .then(data => displayDogPics(data, "#fetch-results"));
             }
 
+            // takes the text of API response and the name of the tag to add
+            // to. displays the response data both in raw stringified json form
+            // and as three images side by side
             function displayDogPics(responseText, tagId) {
                 let displayText = "API JSON response object text: \n";
                 displayText += responseText;
